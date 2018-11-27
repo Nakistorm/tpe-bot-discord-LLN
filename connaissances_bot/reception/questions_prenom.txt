@@ -1,7 +1,4 @@
-Tiens, comment tu t'appelles?
-
-C'est quoi ton pr�nom?
-
+﻿Tiens, comment tu t'appelles?
+C'est quoi ton prénom?
 T'as bien un nom toi?
-
 Dis nous ton nom.
