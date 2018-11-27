@@ -1,3 +1,4 @@
+
 """ Imports de librairie """
 import nltk
 import sys
@@ -7,6 +8,8 @@ from sys import exit
 """ Cette variable va modeliser la base de connaissances du bot """
 training = []
 tweets = []
+chemin_e = 'C:\\Users\\naelg_jm9bezd\\Desktop\\tpe-bot-discord-LLN\\connaissances_bot\\entree\\'
+chemin_r = 'C:\\Users\\naelg_jm9bezd\\Desktop\\tpe-bot-discord-LLN\\connaissances_bot\\reception\\'
 
 """ Formate les jeux de données pour le classifieur """
 def set_training(path, intent):
@@ -34,10 +37,12 @@ def extract_features(document):
 
 """ on ajoute à l'entrainement nos phrases pour que le bot s'approprie des concepts """
 # TODO : modifier les chemins des fichiers .txt (les créer aussi si nécessaire). Ce serait utile si vous vous mettiez d'accord sur un chemin commun (rappelez-vous que vous travaillez en équipe) 
-training += set_training('D:\\projets\\python\\NLTK\\corpus\\fr\\metier\\envoi_mail_activation.txt', 'envoi_mail_activation')
-training += set_training('D:\\projets\\python\\NLTK\\corpus\\fr\\metier\\mdp_oublie.txt', 'mdp_oublie')
-training += set_training('D:\\projets\\python\\NLTK\\corpus\\fr\\social\\insultes.txt', 'insultes')
-training += set_training('D:\\projets\\python\\NLTK\\corpus\\fr\\social\\salutations.txt', 'salutations')
+training += set_training(chemin_r+'blagues.txt', 'blagues')
+training += set_training(chemin_r+'ca_va.txt', 'ca va')
+training += set_training(chemin_r+'note_tpe.txt', 'note tpe')
+training += set_training(chemin_r+'politique.txt', 'politique')
+training += set_training(chemin_r+'questions_prenom.txt', 'questions prenom')
+training += set_training(chemin_r+'salut.txt', 'salut')
 
 for (words, sentiment) in training:
     words_filtered = [e.lower() for e in words.split() if len(e) >= 3]
@@ -53,9 +58,7 @@ classifier = nltk.NaiveBayesClassifier.train(training_set)
 user_inputs = []
 if len(sys.argv) > 1:
     tweetfile = sys.argv[1]
-    with open(tweetfile, "r") as ins:
-      for line in ins:
-        user_inputs.append(line.strip())
+    user_inputs.append(tweetfile)
         
 for user_input in user_inputs:
   valued = classifier.classify(extract_features(user_input.split()))
@@ -64,3 +67,4 @@ for user_input in user_inputs:
 
 classifier.show_most_informative_features() 
 exit()
+
