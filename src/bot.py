@@ -2,6 +2,7 @@
 """ Imports de librairie """
 import nltk
 import sys
+import random
 from sys import exit
 # TODO : dès que le programme fonctionne, ajouter l'import Discord : https://github.com/Rapptz/discord.py
 
@@ -62,8 +63,8 @@ def flatten_list(multiList):
 """ on ajoute à l'entrainement nos phrases pour que le bot s'approprie des concepts """
 print('Alimentation de l\'entraînement du bot...')
 training += set_training(chemin_r+'blagues.txt', 'blagues')
-training += set_training(chemin_r+'ca_va.txt', 'ca va')
-training += set_training(chemin_r+'note_tpe.txt', 'note tpe')
+training += set_training(chemin_r+'ca_va.txt', 'ca_va')
+training += set_training(chemin_r+'note_tpe.txt', 'note_tpe')
 training += set_training(chemin_r+'politique.txt', 'politique')
 training += set_training(chemin_r+'questions_prenom.txt', 'questions prenom')
 training += set_training(chemin_r+'salut.txt', 'salut')
@@ -99,5 +100,6 @@ classifier.show_most_informative_features()
 print('Précision attendue :')
 print(nltk.classify.accuracy(classifier, training_set))
 answers = set_training(chemin_e+valued+'.txt', valued)
-print(answers)
+print(random.randint(0,len(answers)-1))
+print(answers[random.randint(0,len(answers)-1)])
 exit()
