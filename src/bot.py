@@ -98,5 +98,6 @@ for user_input in user_inputs:
 classifier.show_most_informative_features() 
 print('Précision attendue :')
 print(nltk.classify.accuracy(classifier, training_set))
+answers = set_training(chemin_e+valued+'.txt', valued)
+print(answers)
 exit()
-
