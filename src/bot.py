@@ -87,45 +87,63 @@ print('Le bot est prêt à s\'entrainer !')
 classifier = nltk.NaiveBayesClassifier.train(training_set)
 print('Fait.')
 
-""" test de reconnaissance avec fichier test """
-user_inputs = []
-if len(sys.argv) > 1:
-    tweetfile = sys.argv[1]
-    user_inputs.append(tweetfile)
-        
-for user_input in user_inputs:
-  valued = classifier.classify(extract_features(user_input.split()))
-  limit = min(40,len(user_input))
-  print (user_input[:limit] + '...\nIntention détectée: ' + valued)
+class MyClient(discord.Client):
+    async def on_ready(self):
+        print('Logged in as')
+        print(self.user.name)
+        print(self.user.id)
+        print('------')
 
-classifier.show_most_informative_features() 
-print('Précision attendue :')
-print(nltk.classify.accuracy(classifier, training_set))
-answers = set_training(chemin_e+valued+'.txt', valued)
-print(random.randint(0,len(answers)-1))
-print(answers[random.randint(0,len(answers)-1)])
+    async def on_message(self, message):
+        # on ne veut pas que le bot se réponde à lui-même
+        if message.author.id == self.user.id:
+            return
+			
+		# affichages pour déboguer
+        print(self.user)
+        print(message)
+        print(message.content + '\n\n')
 
-client = discord.Client()
+        self_ref = '<@' + str(self.user.id) + '>'
+		
+        if self_ref in message.content:
+            msg_list = message.content.split(self_ref)
+            msg = ''.join(msg_list)
+            
+            """ traitement du message reçu, séparation des mots et exécution """
+            valued = classifier.classify(extract_features(msg.split()))
+            limit = min(80,len(msg))
+            print (msg[:limit] + '...\nIntention détectée: ' + valued)
 
-@client.event
-async def on_ready():
-    print('Logged in as')
-    print(client.user.name)
-    print(client.user.id)
-    print('------')
+            classifier.show_most_informative_features() 
+            print('Précision attendue :')
+            print(nltk.classify.accuracy(classifier, training_set))
+            answers = set_training(chemin_e+valued+'.txt', valued)
+            print(random.randint(0,len(answers)-1))
+            bot_answer = answers[random.randint(0,len(answers)-1)]
+            print(bot_answer)
+            """"""
+            await message.channel.send(bot_answer[0])
+		
+		# jeu : deviner un chiffre
+        if message.content.startswith('$guess'):
+            await message.channel.send('Guess a number between 1 and 10.')
 
-@client.event
-async def on_message(message):
-    if message.content.startswith('!test'):
-        counter = 0
-        tmp = await client.send_message(message.channel, 'Calculating messages...')
-        async for log in client.logs_from(message.channel, limit=100):
-            if log.author == message.author:
-                counter += 1
+            def is_correct(m):
+                return m.author == message.author and m.content.isdigit()
 
-        await client.edit_message(tmp, 'You have {} messages.'.format(counter))
-    elif message.content.startswith('!sleep'):
-        await asyncio.sleep(5)
-        await client.send_message(message.channel, 'Done sleeping')
+            answer = random.randint(1, 10)
+
+            try:
+                guess = await self.wait_for('message', check=is_correct, timeout=5.0)
+            except asyncio.TimeoutError:
+                return await message.channel.send('Sorry, you took too long it was {}.'.format(answer))
+
+            if int(guess.content) == answer:
+                await message.channel.send('You are right!')
+            else:
+                await message.channel.send('Oops. It is actually {}.'.format(answer))
+
+client = MyClient()
 
 client.run('NTUxMzg2NTU4NjAzNzIyNzUy.D1wO0w.81GlQGsYQ_mRvbMftBdaXnIhMDw')
