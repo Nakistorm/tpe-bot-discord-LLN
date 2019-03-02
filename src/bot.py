@@ -11,8 +11,8 @@ from sys import exit
 """ Cette variable va modeliser la base de connaissances du bot """
 training = []
 tweets = []
-chemin_e = 'C:\\Users\\naelg_jm9bezd\\Desktop\\tpe-bot-discord-LLN\\connaissances_bot\\entree\\'
-chemin_r = 'C:\\Users\\naelg_jm9bezd\\Desktop\\tpe-bot-discord-LLN\\connaissances_bot\\reception\\'
+chemin_e = '..\\connaissances_bot\\entree\\'
+chemin_r = '..\\connaissances_bot\\reception\\'
 
 
 def set_training(path, intent):

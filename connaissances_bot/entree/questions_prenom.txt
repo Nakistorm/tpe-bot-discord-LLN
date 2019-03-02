@@ -1,4 +1,1 @@
-﻿Tiens, comment tu t'appelles?
-C'est quoi ton prénom?
-T'as bien un nom toi?
-Dis nous ton nom.
+﻿Moi c'est TPE BOT ! Enchante !
